@@ -19,6 +19,9 @@ A comprehensive Library Management System built with Angular 18 and TypeScript t
 - Routing with lazy loading support
 - Mock data service simulating backend API
 - Responsive design for mobile and desktop
+- 
+### Preview
+[Click Here](https://library-management-hr8g.vercel.app/books)
 
 ## 📋 Prerequisites
 
