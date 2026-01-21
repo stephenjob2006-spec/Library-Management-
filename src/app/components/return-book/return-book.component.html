@@ -1,0 +1,135 @@
+<div class="return-book-container">
+  <div class="header">
+    <h1>Return Books</h1>
+    <p class="subtitle">Manage your borrowed books</p>
+  </div>
+
+  <div class="member-summary" *ngIf="currentMember">
+    <mat-card>
+      <mat-card-content>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <mat-icon>person</mat-icon>
+            <div>
+              <label>Member</label>
+              <span>{{ currentMember.getFullName() }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <mat-icon>book</mat-icon>
+            <div>
+              <label>Active Loans</label>
+              <span>{{ currentMember.activeLoans }} / {{ currentMember.maxLoans }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <mat-icon>card_membership</mat-icon>
+            <div>
+              <label>Membership</label>
+              <span class="membership-badge">{{ currentMember.membershipType }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <mat-icon>check_circle</mat-icon>
+            <div>
+              <label>Available Slots</label>
+              <span>{{ currentMember.getAvailableLoans() }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="transactions-section">
+    <div *ngIf="activeTransactions.length > 0">
+      <h2>Your Borrowed Books ({{ activeTransactions.length }})</h2>
+      
+      <div class="transactions-grid">
+        <mat-card *ngFor="let item of activeTransactions" class="transaction-card">
+          <div class="card-content">
+            <div class="book-cover">
+              <img [src]="item.book.coverImage" [alt]="item.book.title">
+            </div>
+            
+            <div class="book-info">
+              <h3>{{ item.book.title }}</h3>
+              <p class="author">by {{ item.book.author }}</p>
+              <div class="metadata">
+                <div class="meta-item">
+                  <mat-icon>category</mat-icon>
+                  <span>{{ item.book.category }}</span>
+                </div>
+                <div class="meta-item">
+                  <mat-icon>tag</mat-icon>
+                  <span>{{ item.book.isbn }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="transaction-info">
+              <div class="date-info">
+                <div class="date-item">
+                  <mat-icon>event</mat-icon>
+                  <div>
+                    <label>Borrowed Date</label>
+                    <span>{{ formatDate(item.transaction.borrowDate) }}</span>
+                  </div>
+                </div>
+                <div class="date-item">
+                  <mat-icon>event_available</mat-icon>
+                  <div>
+                    <label>Due Date</label>
+                    <span>{{ formatDate(item.transaction.dueDate) }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="status-chip" [ngClass]="{
+                'overdue': isOverdue(item.transaction),
+                'due-soon': !isOverdue(item.transaction) && getDaysUntilDue(item.transaction.dueDate) <= 3,
+                'active': !isOverdue(item.transaction) && getDaysUntilDue(item.transaction.dueDate) > 3
+              }">
+                <mat-icon>{{ isOverdue(item.transaction) ? 'warning' : 'schedule' }}</mat-icon>
+                <span>{{ getStatusText(item.transaction) }}</span>
+              </div>
+              
+              <div class="fine-warning" *ngIf="isOverdue(item.transaction)">
+                <mat-icon>attach_money</mat-icon>
+                <span>Estimated Fine: ${{ item.transaction.calculateFine(1).toFixed(2) }}</span>
+              </div>
+            </div>
+            
+            <div class="actions">
+              <button mat-raised-button color="accent" 
+                      (click)="returnBook(item.transaction.id)"
+                      [disabled]="processingTransactionId === item.transaction.id">
+                <mat-spinner *ngIf="processingTransactionId === item.transaction.id" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="processingTransactionId !== item.transaction.id">keyboard_return</mat-icon>
+                {{ processingTransactionId === item.transaction.id ? 'Processing...' : 'Return Book' }}
+              </button>
+              <button mat-button [routerLink]="['/books', item.book.id]">
+                <mat-icon>info</mat-icon>
+                View Details
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div *ngIf="activeTransactions.length === 0" class="empty-state">
+      <mat-icon>library_books</mat-icon>
+      <h2>No Active Loans</h2>
+      <p>You don't have any books borrowed at the moment.</p>
+      <button mat-raised-button color="primary" routerLink="/books">
+        <mat-icon>search</mat-icon>
+        Browse Books
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-content">
+    <div class="navbar-brand">
+      <mat-icon>local_library</mat-icon>
+      <span class="brand-title">Library Management System</span>
+    </div>
+    
+    <nav class="navbar-links">
+      <a mat-button routerLink="/books" routerLinkActive="active-link">
+        <mat-icon>book</mat-icon>
+        Browse Books
+      </a>
+      <a mat-button routerLink="/borrow" routerLinkActive="active-link">
+        <mat-icon>add_circle</mat-icon>
+        Borrow Book
+      </a>
+      <a mat-button routerLink="/return" routerLinkActive="active-link" [matBadge]="activeLoansCount" 
+         [matBadgeHidden]="activeLoansCount === 0" matBadgeColor="warn">
+        <mat-icon>keyboard_return</mat-icon>
+        Return Book
+      </a>
+    </nav>
+
+    <div class="navbar-user" *ngIf="currentMember">
+      <mat-icon>person</mat-icon>
+      <span>{{ currentMember.getFullName() }}</span>
+      <span class="membership-badge">{{ currentMember.membershipType }}</span>
+    </div>
+  </div>
+</mat-toolbar>

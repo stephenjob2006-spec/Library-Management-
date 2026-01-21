@@ -1,0 +1,129 @@
+<div class="borrow-book-container">
+  <div class="header">
+    <h1>Borrow a Book</h1>
+    <p class="subtitle">Select a book to borrow from our collection</p>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="borrow-content">
+    <div class="content-layout">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Borrowing Information</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="member-info" *ngIf="currentMember">
+            <h3>Your Information</h3>
+            <div class="info-row">
+              <mat-icon>person</mat-icon>
+              <span>{{ currentMember.getFullName() }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>email</mat-icon>
+              <span>{{ currentMember.email }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>book</mat-icon>
+              <span>Active Loans: {{ currentMember.activeLoans }} / {{ currentMember.maxLoans }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>card_membership</mat-icon>
+              <span class="membership-badge">{{ currentMember.membershipType }}</span>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Select Book</h3>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Choose a book</mat-label>
+              <mat-select [(ngModel)]="selectedBookId" (selectionChange)="onBookSelect()">
+                <mat-option *ngFor="let book of availableBooks" [value]="book.id">
+                  {{ book.title }} by {{ book.author }} ({{ book.availableCopies }} available)
+                </mat-option>
+              </mat-select>
+              <mat-hint *ngIf="availableBooks.length === 0">No books currently available</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="validation-message" *ngIf="selectedBookId && !canBorrow()">
+            <mat-icon>warning</mat-icon>
+            <span>{{ getValidationMessage() }}</span>
+          </div>
+
+          <div class="success-message" *ngIf="selectedBookId && canBorrow()">
+            <mat-icon>check_circle</mat-icon>
+            <span>You can borrow this book!</span>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button (click)="cancel()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button color="accent" 
+                  (click)="borrowBook()"
+                  [disabled]="!canBorrow() || processing">
+            <mat-spinner *ngIf="processing" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!processing">add_circle</mat-icon>
+            {{ processing ? 'Processing...' : 'Borrow Book' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card class="preview-card" *ngIf="selectedBook">
+        <mat-card-header>
+          <mat-card-title>Book Preview</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="book-preview">
+            <img [src]="selectedBook.coverImage" [alt]="selectedBook.title" class="preview-image">
+            <h2>{{ selectedBook.title }}</h2>
+            <p class="author">by {{ selectedBook.author }}</p>
+            <div class="book-details">
+              <div class="detail-item">
+                <mat-icon>category</mat-icon>
+                <span>{{ selectedBook.category }}</span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ selectedBook.publishedYear }}</span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>tag</mat-icon>
+                <span>{{ selectedBook.isbn }}</span>
+              </div>
+              <div class="detail-item availability">
+                <mat-icon>{{ selectedBook.isAvailable() ? 'check_circle' : 'cancel' }}</mat-icon>
+                <span>{{ selectedBook.availableCopies }} of {{ selectedBook.totalCopies }} available</span>
+              </div>
+            </div>
+            <div class="description">
+              <h4>Description</h4>
+              <p>{{ selectedBook.description }}</p>
+            </div>
+            <div class="due-date-info">
+              <mat-icon>event</mat-icon>
+              <span>Due date will be 14 days from today</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="empty-state" *ngIf="availableBooks.length === 0">
+      <mat-icon>library_books</mat-icon>
+      <h2>No Books Available</h2>
+      <p>All books are currently borrowed. Please check back later.</p>
+      <button mat-raised-button color="primary" routerLink="/books">
+        <mat-icon>arrow_back</mat-icon>
+        View All Books
+      </button>
+    </div>
+  </div>
+</div>

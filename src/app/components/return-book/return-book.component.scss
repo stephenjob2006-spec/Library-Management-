@@ -1,0 +1,312 @@
+.return-book-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    color: #3f51b5;
+  }
+  
+  .subtitle {
+    font-size: 18px;
+    color: #666;
+  }
+}
+
+.member-summary {
+  margin-bottom: 30px;
+  
+  mat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      
+      .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+        
+        div {
+          display: flex;
+          flex-direction: column;
+          
+          label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+          }
+          
+          span {
+            font-size: 18px;
+            font-weight: 600;
+          }
+          
+          .membership-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: #ffc107;
+            color: #000;
+            border-radius: 12px;
+            font-size: 12px;
+            width: fit-content;
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.transactions-section {
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .transactions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 20px;
+    
+    .transaction-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      }
+      
+      .card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        
+        .book-cover {
+          width: 100%;
+          height: 250px;
+          overflow: hidden;
+          border-radius: 8px;
+          
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        
+        .book-info {
+          h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #333;
+          }
+          
+          .author {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+          }
+          
+          .metadata {
+            display: flex;
+            gap: 16px;
+            
+            .meta-item {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 13px;
+              color: #666;
+              
+              mat-icon {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+                color: #3f51b5;
+              }
+            }
+          }
+        }
+        
+        .transaction-info {
+          background-color: #f5f5f5;
+          padding: 16px;
+          border-radius: 8px;
+          
+          .date-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 12px;
+            
+            .date-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 8px;
+              flex: 1;
+              
+              mat-icon {
+                color: #3f51b5;
+                margin-top: 2px;
+              }
+              
+              div {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                
+                label {
+                  font-size: 11px;
+                  color: #999;
+                  text-transform: uppercase;
+                  font-weight: 500;
+                }
+                
+                span {
+                  font-size: 14px;
+                  color: #333;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+          
+          .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+            
+            &.active {
+              background-color: #e3f2fd;
+              color: #1976d2;
+            }
+            
+            &.due-soon {
+              background-color: #fff3e0;
+              color: #e65100;
+            }
+            
+            &.overdue {
+              background-color: #ffebee;
+              color: #c62828;
+            }
+          }
+          
+          .fine-warning {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: #fff3e0;
+            border-left: 3px solid #ff9800;
+            border-radius: 4px;
+            
+            mat-icon {
+              color: #ff9800;
+              font-size: 20px;
+            }
+            
+            span {
+              color: #e65100;
+              font-weight: 500;
+            }
+          }
+        }
+        
+        .actions {
+          display: flex;
+          gap: 12px;
+          
+          button {
+            flex: 1;
+            
+            mat-icon {
+              margin-right: 5px;
+            }
+            
+            mat-spinner {
+              display: inline-block;
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  
+  mat-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .transactions-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .header h1 {
+    font-size: 28px;
+  }
+}
